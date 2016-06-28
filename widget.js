@@ -144,6 +144,7 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
 
             this.setupPauseBtn();
             this.setupClearBtn();
+            this.setupResetBtn();
 
             // initialize popovers
             $('.com-chilipeppr-widget-spconsole [data-toggle="popover"]').popover();
@@ -176,9 +177,20 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
         // global props for filtering console
         filterRegExp: null,
         isFilterActive: false,
+        setupResetBtn: function() {
+            $('.com-chilipeppr-widget-spconsole .spconsole-reset').click(this.onReset.bind(this));
+        },
         setupClearBtn: function() {
             $('.com-chilipeppr-widget-spconsole .spconsole-clear').click(this.onClear.bind(this));
             //this.appendLog("asdfasdf");
+        },
+        onReset: function(evt) {
+            console.log("onReset. evt:", evt);  
+            const ESC = String.fromCharCode(27);
+            $('.com-chilipeppr-widget-spconsole .user-txt-input').val(ESC);
+            $("#com-chilipeppr-widget-spconsole-consoleform").submit();
+            // var log = this.logEls.log;
+            // log.html("  *** RESET ***\n");
         },
         onClear: function(evt) {
             console.log("onClear. evt:", evt);
