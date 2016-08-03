@@ -144,7 +144,7 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
 
             this.setupPauseBtn();
             this.setupClearBtn();
-            this.setupResetBtn();
+            this.setupDownloadBtn();
 
             // initialize popovers
             $('.com-chilipeppr-widget-spconsole [data-toggle="popover"]').popover();
@@ -177,20 +177,12 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
         // global props for filtering console
         filterRegExp: null,
         isFilterActive: false,
-        setupResetBtn: function() {
-            $('.com-chilipeppr-widget-spconsole .spconsole-reset').click(this.onReset.bind(this));
+        setupDownloadBtn: function() {
+            $('.com-chilipeppr-widget-spconsole .spconsole-download').click(this.downloadStatus.bind(this));
         },
         setupClearBtn: function() {
             $('.com-chilipeppr-widget-spconsole .spconsole-clear').click(this.onClear.bind(this));
             //this.appendLog("asdfasdf");
-        },
-        onReset: function(evt) {
-            console.log("onReset. evt:", evt);  
-            const ESC = String.fromCharCode(27);
-            $('.com-chilipeppr-widget-spconsole .user-txt-input').val(ESC);
-            $("#com-chilipeppr-widget-spconsole-consoleform").submit();
-            // var log = this.logEls.log;
-            // log.html("  *** RESET ***\n");
         },
         onClear: function(evt) {
             console.log("onClear. evt:", evt);
@@ -732,7 +724,21 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
             log: null,
             logOuter: null,
         },
+        statusReportData: "",        
+        downloadStatus: function() {
+            var pom = document.createElement('a');
+            pom.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.statusReportData));
+            pom.setAttribute('download', 'test.csv');
+            pom.click();
+        },
         appendLog: function(msg) {
+            
+            //if this is a status report... (TODO: improve this detection to be more robust. i.e. enough that it contains an 'sr' element, rather than have to begin with one)
+            if (msg.match("^{\"sr\":")) {
+                if (this.statusReportData.length > 3000000) { this.statusReportData = ""; }
+                this.statusReportData+=msg;
+            }
+            
             //console.log("appendLog. msg:", msg);
 
             if (this.isFilterActive) {
