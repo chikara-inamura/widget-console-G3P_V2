@@ -728,7 +728,7 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
         },
         statusReportData: "",
         clearStatusReportCache: function() {
-            statusReportData = "";
+            this.statusReportData = "";
         },
         downloadStatus: function() {
             var pom = document.createElement('a');
