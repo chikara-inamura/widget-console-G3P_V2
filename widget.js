@@ -741,7 +741,7 @@ cpdefine("inline:com-chilipeppr-widget-spconsole", ["chilipeppr_ready", "jqueryc
             //if this is a status report... (TODO: improve this detection to be more robust. i.e. enough that it contains an 'sr' element, rather than have to begin with one)
             if (msg.match("^{\"sr\":")) {
                 if (this.statusReportData.length > 3000000) { this.clearStatusReportCache(); }
-                this.statusReportData+=msg;
+                this.statusReportData+=Date.now()+","+msg;
             }
             
             //console.log("appendLog. msg:", msg);
